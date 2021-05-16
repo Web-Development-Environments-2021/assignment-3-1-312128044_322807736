@@ -6,6 +6,6 @@ Submitters:
 Daniel Zamanski - 312128044
 Liraz Zeidman - 322807736
 
-Estimated Time for Frontend and Backend is about two weeks
+Estimated Time for Client and Server side is about 2 weeks
 
 
