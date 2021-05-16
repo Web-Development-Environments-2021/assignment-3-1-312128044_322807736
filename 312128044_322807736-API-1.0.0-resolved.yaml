@@ -1,0 +1,538 @@
+---
+openapi: 3.0.0
+info:
+  title: LirazZamanski
+  description: |
+    this is the API part of the final project at the course "SISE-Web-Development-Environments".
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/pizZeidman/API/1.0.0
+  description: SwaggerHub API Auto Mocking
+- url: https://petstore.swagger.io/v2
+paths:
+  /login:
+    post:
+      tags:
+      - Auth
+      summary: An existing user logs in to his account.
+      description: A JSON object contains all the details about the logged in user.
+      requestBody:
+        description: Item to Get
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login-user'
+        required: true
+      responses:
+        "200":
+          description: the user logged in.
+        "400":
+          description: wrong input.
+        "404":
+          description: the user does not exist.
+        "500":
+          description: the server has encountered a situation it doesnt know how to handle.
+  /register:
+    post:
+      tags:
+      - Auth
+      summary: A new user from client is added to the server.
+      description: A JSON object contains all the details about new user.
+      requestBody:
+        description: Item to add
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body'
+        required: true
+      responses:
+        "201":
+          description: a new user regestered.
+        "400":
+          description: wrong input.
+        "404":
+          description: the user does not exist.
+        "500":
+          description: the server has encountered a situation it doesnt know how to handle.
+  /home:
+    get:
+      tags:
+      - League Page
+      summary: the home page of the site.
+      description: A JSON object contains all the details about the home page.
+      responses:
+        "200":
+          description: Data of the league
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/League'
+        "404":
+          description: the user does not exist.
+        "500":
+          description: the server has encountered a situation it doesnt know how to handle.
+  /playerPage/{fullName}:
+    summary: Represents a specific player
+    description: |
+      This resource represents an individual player in the system. Each player is identified by their full name.
+    get:
+      tags:
+      - Player Page
+      summary: Gets a player by his fullname.
+      operationId: getPlayerByFullname
+      parameters:
+      - name: fullName
+        in: path
+        description: player full name to present his page
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: Lionel Messi
+      responses:
+        "200":
+          description: Successful presenting the player page
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Player'
+        "400":
+          description: Wrong input parameters
+  /playerPersonalPage/{fullName}:
+    summary: Represents a specific player
+    description: |
+      This resource represents an individual player in the system. Each player is identified by their full name.
+    get:
+      tags:
+      - Player Page
+      - Personal Page
+      summary: Gets a player persoal page by his fullname.
+      operationId: getPersonalPlayerByFullname
+      parameters:
+      - name: fullName
+        in: path
+        description: player full name to present his page
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: Avi Nimni
+      responses:
+        "200":
+          description: Successful presenting the player page
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+        "400":
+          description: Wrong input parameters
+  /coachPage/{fullName}:
+    summary: Represents a specific coach
+    description: |
+      This resource represents an individual coach, each coach is represented by their full name
+    get:
+      tags:
+      - Coach Page
+      summary: Gets a coach by his fullname.
+      operationId: getCoachByFullname
+      parameters:
+      - name: fullName
+        in: path
+        description: User full name
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: Daniel Zamanski
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coach'
+        "400":
+          description: Wrong input parameters
+  /coachPersonalPage/{fullName}:
+    summary: Represents a spesific personal page of coach
+    description: |
+      This resource represents an individual coach in the system. Each coach is identified by their full name.
+    get:
+      tags:
+      - Coach Page
+      - Personal Page
+      summary: Gets a coach by his fullname.
+      operationId: getPersonalCoachByFullname
+      parameters:
+      - name: fullName
+        in: path
+        description: User full name
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: Liraz Zeidman
+      responses:
+        "200":
+          description: Successful presenting the player page
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+        "400":
+          description: Wrong input parameters
+  /gamesOfTheSeason:
+    get:
+      tags:
+      - Game page
+      summary: Get all data of games
+      description: Get arrays of games
+      responses:
+        "200":
+          description: Data of past games
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_2'
+        "400":
+          description: Wrong input parameters
+  /TeamPage/{TeamName}:
+    summary: Represents a specific player
+    description: |
+      This resource represents a team. each team is identified by it's name
+    get:
+      tags:
+      - Team Page
+      summary: Gets a team by it's fullname.
+      operationId: getTeamByFullname
+      parameters:
+      - name: TeamName
+        in: path
+        description: team name to present his page
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: Manchester United
+      responses:
+        "200":
+          description: Successful presenting the team page
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Team'
+        "400":
+          description: Wrong input parameters
+components:
+  schemas:
+    Login-user:
+      type: object
+      properties:
+        username:
+          maxLength: 8
+          minLength: 3
+          type: string
+          description: username contains between 3 to 8 letters only.
+          example: mrcrab
+        password:
+          maxLength: 10
+          minLength: 5
+          type: string
+          description: "password contains between 5 to 10 characters, at least one letter, number and special char.  \n"
+          example: sponib0@
+      description: A JSON object contains all the details about the logged in user.
+    User:
+      type: object
+      properties:
+        username:
+          maxLength: 8
+          minLength: 3
+          type: string
+          description: username contains between 3 to 8 letters only.
+          example: mrcrab
+        firstName:
+          type: string
+          description: |
+            first name of the user.
+          example: Sandy
+        lastName:
+          type: string
+          description: |
+            last name of the user.
+          example: Cheeks
+        password:
+          maxLength: 10
+          minLength: 5
+          type: string
+          description: "password contains between 5 to 10 characters, at least one letter, number and special char.  \n"
+          example: sponeb0@
+        country:
+          type: string
+          description: "the country of the user \n"
+          example: Bikini Bottom
+        email:
+          type: string
+          description: |
+            user's mail. the mail should be in the format user@example.end
+          format: email
+          example: patrikStr1@gmail.com
+        picture:
+          type: string
+          description: |
+            URL of the image of the user.
+          format: URL
+          example: https://cloudinary.com/sandyCheeks
+      description: A JSON object contains all the details about the logged in user.
+    Player:
+      type: object
+      properties:
+        fullName:
+          type: string
+          description: player full name.
+          example: Avi Nimni
+        TeamName:
+          type: string
+          description: player team name.
+          example: Real Madrid
+        PositionNum:
+          type: integer
+          description: |
+            position number in the team
+          example: 14
+        picture:
+          type: string
+          description: |
+            URL of the image of the user.
+          format: URL
+          example: https://cloudinary.com/sandyCheeks
+      description: A JSON object contains all the details about the Player.
+    Coach:
+      type: object
+      properties:
+        fullName:
+          type: string
+          description: player full name.
+          example: Avi Nimni
+        TeamName:
+          type: string
+          description: player team name.
+          example: Real Madrid
+        picture:
+          type: string
+          description: |
+            URL of the image of the user.
+          format: URL
+          example: https://cloudinary.com/sandyCheeks
+      description: A JSON object contains all the details about the Coach.
+    Team:
+      type: object
+      properties:
+        teamPlayers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Team_teamPlayers'
+        teamName:
+          type: string
+          description: name of the team
+          example: Real Madrid
+        teamCoach:
+          $ref: '#/components/schemas/Team_teamCoach'
+        teamLogo:
+          type: string
+          description: |
+            URL of the image of the user.
+          format: URL
+          example: https://cloudinary.com/RealMadrid
+        futureGames:
+          type: array
+          description: the future games of the team.
+          items:
+            $ref: '#/components/schemas/Team_futureGames'
+        pastGames:
+          type: array
+          description: the past games of the team.
+          items:
+            $ref: '#/components/schemas/Team_pastGames'
+      description: A JSON object contains all the details about the Team.
+    personalData:
+      type: object
+      properties:
+        Nationality:
+          type: string
+          description: the player's nationality
+          example: Israeli
+        Birthdate:
+          type: string
+          description: the date of the player's birth
+          format: date
+        BirthCountry:
+          type: string
+          description: "the country of the user \n"
+          example: Bikini Bottom
+        Height:
+          type: string
+          description: the player's height in cm
+          example: 1.74cm
+        Weight:
+          type: string
+          description: the player's weight in kg
+          example: 89kg
+      description: A JSON object contains all the personal details of a coah or a player.
+    FutureGame:
+      type: object
+      properties:
+        HomeTeam:
+          $ref: '#/components/schemas/Team'
+        AwayTeam:
+          $ref: '#/components/schemas/Team'
+        GameDate:
+          type: string
+          description: the date in which the game will occur
+          format: date
+        Field:
+          type: string
+          description: the field the game was played on
+          example: Teddy
+      description: an object containing all info of Game yet to occur
+    PastGame:
+      type: object
+      properties:
+        HomeTeam:
+          $ref: '#/components/schemas/Team'
+        AwayTeam:
+          $ref: '#/components/schemas/Team'
+        HomeGoals:
+          minimum: 0
+          type: integer
+          description: number of goals made by home team
+          example: 10
+        AwayGoals:
+          minimum: 0
+          type: integer
+          description: number of goals made by away team
+          example: 7
+        GameDate:
+          type: string
+          description: the date in which the game occured
+          format: date
+        Field:
+          type: string
+          description: the field the game was played on
+          example: Teddy
+        Events:
+          minLength: 3
+          type: array
+          description: all the events that occured in the game
+          items:
+            $ref: '#/components/schemas/PastGame_Events'
+      description: an object containing all info of Game that occured
+    League:
+      type: object
+      properties:
+        schema:
+          $ref: '#/components/schemas/League_schema'
+      description: an object containing all info of a League
+    body:
+      allOf:
+      - $ref: '#/components/schemas/User'
+      - type: object
+        properties:
+          conformationPassword:
+            type: string
+            description: |
+              confirmation password
+            writeOnly: true
+            example: spongeb0@
+    inline_response_200:
+      properties:
+        playerData:
+          $ref: '#/components/schemas/Player'
+        personalData:
+          $ref: '#/components/schemas/personalData'
+    inline_response_200_1:
+      properties:
+        playerData:
+          $ref: '#/components/schemas/Coach'
+        personalData:
+          $ref: '#/components/schemas/personalData'
+    inline_response_200_2:
+      properties:
+        pastGames:
+          type: array
+          items:
+            $ref: '#/components/schemas/PastGame'
+        futureGames:
+          type: array
+          items:
+            $ref: '#/components/schemas/FutureGame'
+    Team_teamPlayers:
+      properties:
+        fullName:
+          $ref: '#/components/schemas/Player/properties/fullName'
+        picture:
+          $ref: '#/components/schemas/Player/properties/picture'
+    Team_teamCoach:
+      type: object
+      properties:
+        Name:
+          $ref: '#/components/schemas/Coach/properties/fullName'
+        Picture:
+          $ref: '#/components/schemas/Coach/properties/picture'
+      description: the team coach
+    Team_futureGames:
+      properties:
+        futuregame:
+          $ref: '#/components/schemas/FutureGame'
+    Team_pastGames:
+      properties:
+        pastgame:
+          $ref: '#/components/schemas/PastGame'
+    PastGame_Events:
+      properties:
+        event:
+          type: string
+          description: an event that occured in the game
+          example: red flag to Messi
+        Time:
+          maximum: 23.59
+          minimum: 0
+          type: string
+          description: the time in the game in which the value occured
+          example: "15.48"
+        minuteOfGame:
+          minimum: 0
+          type: string
+          description: the minute in the game in which the value occured
+          example: "35"
+        descriptionOfEvent:
+          minimum: 0
+          type: string
+          description: the description of the event
+          example: "35"
+    League_schema:
+      properties:
+        leagueName:
+          type: string
+          description: league name
+          example: SuperLeague
+        seasonName:
+          type: string
+          description: season name
+          example: 2010/2011
+        currentStage:
+          type: string
+          description: stage name
+          example: STAGE
+        nextGamePlanned:
+          $ref: '#/components/schemas/FutureGame'
